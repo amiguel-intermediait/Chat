@@ -1,0 +1,43 @@
+version: '3.7'
+services:
+
+  db:
+    container_name: db
+    image: postgres:alpine3.16
+    restart: unless-stopped
+    environment:
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_USER=admin
+      - POSTGRES_DB=example
+    volumes:
+      - db-volume:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      - test      
+
+  app:
+    container_name: app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports: 
+      - 8080:8080
+    depends_on:
+      - db
+    restart: unless-stopped
+    environment:
+      - PORT=8080
+      - SECRETKEY=secret
+      - DBNAME=example
+      - DBUSER=admin
+      - DBPASSWORD=admin
+      - DBHOST=db
+      - DBDIALECT=postgres
+    networks:
+      - test
+volumes:
+  db-volume:
+
+networks:
+    test:
