@@ -2,6 +2,10 @@
 #LocalStart
 
     npm install
+    
+    docker-compose up db  
+
+    from other console (or use -d)
 
     nodemon dist/app.js
 
